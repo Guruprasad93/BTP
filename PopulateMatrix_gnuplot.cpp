@@ -696,7 +696,7 @@ void tissue_state1(FILE *fidx, FILE *fidy, FILE *fidz)
 
 void start_automaton()
 {
-    int time_of_sim = 6;
+    int time_of_sim = 2000;
     int op1, op2, op3;
     int i, j, k;
     char filename[20];
