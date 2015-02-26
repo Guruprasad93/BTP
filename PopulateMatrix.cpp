@@ -6,16 +6,18 @@
 #include<stdlib.h>
 #include<map>
 #include<fstream>
-
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/variate_generator.hpp>
 
 using namespace std;
 
 
 
 //GLOBAL Variables
-const int l_matrix = 100;
-const int b_matrix = 100;
-const int h_matrix = 100;
+const int l_matrix = 2;
+const int b_matrix = 2;
+const int h_matrix = 2;
 const int T_Div = 1200;
 int Sim_Matrix[l_matrix][b_matrix][h_matrix];
 int mig_index[l_matrix][b_matrix][h_matrix];
@@ -52,12 +54,28 @@ int checkpersctr(int mig_dir)
 }
 
 
+int random_time_division()
+{
+    int Division_time;
+    double randc;
+    randc = ((double) rand()/(RAND_MAX));
+    
+    boost::mt19937 igen(randc*1000);
+    boost::variate_generator<boost::mt19937, boost::normal_distribution<> > gen(igen, boost::normal_distribution<>(20,2.5));
+    
+    Division_time = gen()*60;
+    //Division_time = Division_time*60;
+    return Division_time;
+}
+    
+
 
 //Populate Matrices
 void uniform_populateMatrix(int x, int y, int z)
 {
     double randc;
     randc = ((double) rand()/(RAND_MAX));
+    //int arbit = 1000;
     
       
     //std::random_device rd;
@@ -73,7 +91,8 @@ void uniform_populateMatrix(int x, int y, int z)
         Sim_Matrix[x][y][z] = 1;
         mig_index[x][y][z] = migration;
         persctr[x][y][z] = checkpersctr(migration);
-        divctr[x][y][z] = T_Div;
+        //divctr[x][y][z] = T_Div;
+        divctr[x][y][z] = random_time_division();
         gridsvisited[x][y][z] = 'N';
     }
     else
@@ -101,7 +120,9 @@ void initseedontop()
                 Sim_Matrix[k][j][i] = 1;
                 mig_index[k][j][i] = migration;
                 persctr[k][j][i] = checkpersctr(migration);
-                divctr[k][j][i] = T_Div;
+                //divctr[k][j][i] = T_Div;
+                divctr[x][y][z] = random_time_division();
+        
             }
         }
     }
@@ -112,6 +133,7 @@ void wound_healing(int radius)
 {
     int i,j,k;
     int migration;
+    int arbit = 1000;
     
     for (i=0; i<h_matrix; i++)
     {
@@ -125,7 +147,9 @@ void wound_healing(int radius)
                     Sim_Matrix[k][j][i] = 1;
                     mig_index[k][j][i] = migration;
                     persctr[k][j][i] = checkpersctr(migration);
-                    divctr[k][j][i] = T_Div;
+                    //divctr[k][j][i] = T_Div;
+                    divctr[x][y][z] = random_time_division();
+        
                 }
              }
          }
@@ -692,7 +716,7 @@ void tissue_state1(FILE *fidx, FILE *fidy, FILE *fidz)
 
 void start_automaton(FILE *fidx, FILE *fidy, FILE *fidz)
 {
-    int time_of_sim = 2;
+    int time_of_sim = 10;
     int op1, op2, op3;
     int i, j, k;
     
