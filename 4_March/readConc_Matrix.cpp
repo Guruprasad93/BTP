@@ -11,11 +11,11 @@ using namespace boost::algorithm;
 
 const int l_matrix = 5;
 
-void read_ConcMatrix(int conc_grad[10][10])
+void read_ConcMatrix(double conc_grad[10][10], char filename[100])
 {
     string line;
     ifstream infile;
-    infile.open("thefile.txt");
+    infile.open(filename);
     vector<string> tokens;
     int row = 0;
     
@@ -41,18 +41,33 @@ void read_ConcMatrix(int conc_grad[10][10])
 int main()
 {
     
-    int conc_grad[10][10];
+    int time, time_of_sim=2;
+    ifstream infile;
+    char filename[100];
     
-    read_ConcMatrix(conc_grad);
-    //Display Conc_gradient
-    for (int row = 0; row<2; row++)
+    for (time = 0; time<time_of_sim; time++)
     {
-        for (int col = 0; col<5; col++)
+        
+        cout<<endl<<"Time = "<<time<<endl;
+        snprintf(filename, sizeof(char) * 32, "Conc_Matrix_%i.txt", time+1);
+        //filename = sprintf("Conc_Matrix_%d",time+1);
+        double conc_grad[10][10];
+        
+        //infile.open(filename);
+        
+        read_ConcMatrix(conc_grad, filename);
+        
+        //Display Conc_gradient
+        for (int row = 0; row<5; row++)
         {
-            cout<<conc_grad[row][col]<<" ";
-        }
-        cout<<endl;
-    }    
+            for (int col = 0; col<5; col++)
+            {
+                cout<<conc_grad[row][col]<<" ";
+            }
+            cout<<endl;
+        }        
+        //infile.close();
+    }
 }
     
     
